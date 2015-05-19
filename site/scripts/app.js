@@ -2,7 +2,7 @@ console.log ("#Gaby: Cargo app.js");
 // Inyectando el modulo de ui-router
 // como parametro del arreglo de objetos del modulo
 var modulo1=
-	angular.module("reeditgam",['ui.router']);
+	angular.module("reeditgam",['ui.router','hSweetAlert']);
 // Configurando las rutas
 // Recibe un arreglo de elementos 
 modulo1.config(
@@ -10,16 +10,23 @@ modulo1.config(
 	'$urlRouterProvider',
 	function($stateProvider,$urlRouterProvider){
 		//Iniciando rutina de configuracion
+		// Creando ruta /home
 		$stateProvider.state('home',{
 			// Definiendo estado como un objeto
 			url:"/home",  // Url que dedine el estado
 			templateUrl: "/home.html",  //Plantilla base para el estado
-			controller: 'mainCtrl'
+			controller: "mainCtrl"
 		});
+		// Creando ruta de visualizacion de Post
+		$stateProvider.state('posts',{
+			url: "/posts/{id}",
+			templateUrl: "/posts.html",
+			controller: "postsCtrl"
+		});
+
 		//Url por defecto
 		$urlRouterProvider.otherwise('home');
 	}]);
-console.log("#salio del configurador");
 
 
 //CREANDO UN SERVICIO del tipo factory
@@ -50,9 +57,10 @@ posts : [
 }]);
 	//CREANDO CONTROLADOR
 	// dependcy injection
+	// Creando controlador 
 modulo1.controller("mainCtrl",[
-	'$scope','posts',  // Inyectando factory post
-	function($scope, posts){
+	'$scope','posts','sweet',  // Inyectando factory post
+	function($scope, posts,sweet){
 		$scope.test = "Hola Angular";
 		//Modelo al cual se le asigna 
 		//el resultado del factory
@@ -63,7 +71,7 @@ modulo1.controller("mainCtrl",[
 		$scope.addPost = function(){
 			if(!$scope.title || $scope.title === "")
 			{
-              alert("NO se permite postear titulos vacios")
+              sweet.show("NO se permite postear titulos vacios")
               return;
 			}
 		$scope.posts.push(
@@ -82,3 +90,11 @@ modulo1.controller("mainCtrl",[
              post.upvotes += 1;
 	    }
 	}]);
+// Crando controlador postsCtrl
+modulo1.controller("postsCtrl", [
+	'$scope',
+	'$stateParams',
+	'posts'], function($scope, $stateParams, posts){
+		//cuerpo del controlador
+		
+	});
