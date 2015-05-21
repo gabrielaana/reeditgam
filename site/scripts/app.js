@@ -62,6 +62,7 @@ modulo1.controller("mainCtrl",[
 	'$scope','posts','sweet',  // Inyectando factory post
 	function($scope, posts,sweet){
 		$scope.test = "Hola Angular";
+
 		//Modelo al cual se le asigna 
 		//el resultado del factory
 		$scope.posts = posts.posts;
@@ -78,7 +79,16 @@ modulo1.controller("mainCtrl",[
 			{
 				title:$scope.title,
 				link:$scope.link,
-			 upvotes: 0
+			 upvotes: 0,
+			 comments : [{
+			 	author : "Gustavo",
+			 	body: "Me gusto ese link.",
+			 	upvotes: 0},
+			 	{
+			 		author:"Keila",
+			 		body: "Awesome link.",
+			 		upvotes: 2
+			 	}]
 			});
            //Two-way data bindingit
            $scope.title = "";
@@ -94,7 +104,13 @@ modulo1.controller("mainCtrl",[
 modulo1.controller("postsCtrl", [
 	'$scope',
 	'$stateParams',
-	'posts'], function($scope, $stateParams, posts){
+	'posts', function($scope, $stateParams, posts){
+		$scope.incrementUpvotes = function (comment){
+			comment.upvotes += 1;
+		};
 		//cuerpo del controlador
+		//Obteniendo el parametro id de los parametros del estado 
+		//de la ruta y pasandolo como argumento al objeto del factory
+		$scope.post = posts.posts[$stateParams.id];
 		
-	});
+	}]);
